@@ -1,0 +1,53 @@
+# Arquivos de Sistema Operacional
+.DS_Store
+Thumbs.db
+ehthumbs.db
+.Trash-1000/ # ou .Trash
+*.swp # Arquivos de swap do Vim/Neovim
+*.swo
+
+# Docker
+# O Mosquitto persiste seus dados e logs nestas pastas.
+# Não devem ser versionadas, pois são geradas em tempo de execução.
+mosquitto/data/
+mosquitto/log/
+
+# Ignorar o diretório de módulos da Next.js/Node.js
+smart-home-dashboard/node_modules/
+
+# Ignorar o diretório de build do Next.js
+smart-home-dashboard/.next/
+
+# Ignorar arquivos de variáveis de ambiente locais da Next.js
+# Estes contêm configurações sensíveis ou específicas do ambiente local
+smart-home-dashboard/.env.local
+smart-home-dashboard/.env.*.local
+smart-home-dashboard/.vercel/ # Arquivos de configuração do Vercel CLI, se usar
+
+# Ignorar diretório de output do 'next export' (se você usasse export estático, o que é menos comum com App Router)
+smart-home-dashboard/out/
+
+# Python
+# Ignorar caches de bytecode do Python
+sensors/__pycache__/
+*.pyc
+
+# Ignorar ambientes virtuais Python
+venv/
+.venv/
+
+# Logs genéricos (se houver outros logs de aplicação diretamente na raiz, etc.)
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log* # Logs do pnpm
+
+# Arquivos de backup gerados por editores
+docker-compose.yml.save
+
+# Arquivos de IDE (Editores de Código)
+.idea/ # JetBrains IDEs (IntelliJ, PyCharm, WebStorm)
+.vscode/ # VS Code
+*.sublime-project
+*.sublime-workspace

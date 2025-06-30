@@ -1,0 +1,50 @@
+
+services:
+  # Define o serviço Mosquitto
+  mosquitto:
+    image: eclipse-mosquitto:latest # Usa a imagem oficial mais recente do Mosquitto
+    container_name: iot_broker     # Nome amigável para o seu container
+    ports:
+      - "1883:1883" # Mapeia a porta 1883 do host para a porta 1883 do container (MQTT padrão)
+      - "9001:9001" # Mapeia a porta 9001 do host para a porta 9001 do container (MQTT via WebSockets)
+    volumes:
+      # Mapeia a pasta de configuração local para dentro do container
+      - ./mosquitto/config:/mosquitto/config
+      # Mapeia a pasta de dados local para dentro do container (persistência)
+      - ./mosquitto/data:/mosquitto/data
+      # Mapeia a pasta de logs local para dentro do container
+      - ./mosquitto/log:/mosquitto/log
+    # Garante que o Mosquitto use o arquivo de configuração que criamos
+    command: mosquitto -c /mosquitto/config/mosquitto.conf
+    restart: unless-stopped # Faz o container reiniciar automaticamente, a menos que seja parado manualmente
+
+  sensor_temperatura_sala:
+    build:
+      context: ./sensors/sensor_temp # Caminho para a pasta onde está o Dockerfile e os arquivos do sensor
+      dockerfile: Dockerfile              # Nome do Dockerfile dentro dessa pasta
+    container_name: sensor_sala_temp
+    environment:
+      # Variáveis de ambiente que serão lidas pelo script sensor_temperatura.py
+      MQTT_BROKER: mosquitto          # Usa o nome do serviço do Mosquitto dentro da rede Docker Compose
+      MQTT_PORT: 1883
+      SENSOR_TOPIC: /casa/sala-de-estar/temperature/1 # Tópico MQTT específico para este sensor
+      READ_INTERVAL: 10                # Intervalo de leitura em segundos
+      MIN_TEMP: 20.0                  # Temperatura mínima simulada
+      MAX_TEMP: 25.0                  # Temperatura máxima simulada
+      PYTHONUNBUFFERED: 1 
+    depends_on:
+      - mosquitto # Garante que o Mosquitto inicie antes deste sensor
+    restart: unless-stopped # Faz o container reiniciar automaticamente
+
+
+    # --- SERVIÇO ATUALIZADO PARA O DASHBOARD COM NEXT.JS ---
+  smart_home_dashboard: # Renomeie para refletir a pasta, se desejar
+    build:
+      context: ./smart-home-dashboard # Caminho para a pasta do seu projeto Next.js
+      dockerfile: Dockerfile          # O Dockerfile que você acabou de criar/atualizar
+    container_name: frontend
+    ports:
+      - "3000:3000" # Mapeia a porta 3000 do seu host para a porta 3000 do container Next.js
+    depends_on:
+      - mosquitto # O dashboard precisa do broker para se conectar
+    restart: unless-stopped
