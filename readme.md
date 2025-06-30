@@ -10,20 +10,6 @@ A solução é composta pelos seguintes serviços conteinerizados:
 * **Sensores IoT Simulados (Python):** Múltiplos contêineres Python que simulam o comportamento de sensores (temperatura, umidade) e atuadores (status de lâmpada). Eles publicam dados periodicamente em tópicos MQTT específicos.
 * **Dashboard Web (Next.js/React + Node.js):** Um contêiner que executa uma aplicação Next.js. O frontend em React se conecta diretamente ao broker MQTT (via WebSockets) e atualiza a interface com os dados dos sensores em tempo real.
 
-+-----------------+           +-------------------+           +-----------------+
-|   Seu Navegador |           |                   |           |   Dispositivos  |
-| (Frontend React)|<--------->|   MQTT Broker     |<----------|   (Sensores)    |
-| (Recebe dados)  | (MQTT WS) |   (Mosquitto)     |   (MQTT)  +-----------------+
-+-----------------+           |                   |
-        ^                     |                   |
-        | (HTTP)              +-------------------+
-        |
-+---------------------+
-|   Next.js Server    |
-| (Node.js Container) |
-| (Serve Dashboard)   |
-+---------------------+
-
 ## Pré-requisitos
 
 Para rodar este projeto, você precisará ter as seguintes ferramentas instaladas em sua máquina:
@@ -45,10 +31,10 @@ Siga estes passos para colocar sua Casa Inteligente em funcionamento:
 
 ### 1. Clonar o Repositório
 
-Abra seu terminal e clone este repositório para sua máquina local. Certifique-se de substituir `[URL_DO_SEU_REPOSITORIO]` pela URL real do seu repositório Git.
+Abra seu terminal e clone este repositório para sua máquina local. 
 
 ```bash
-git clone [URL_DO_SEU_REPOSITORIO]
+git clone https://github.com/astromar2187/sd_smarthome.git
 cd sd_smarthome # Navegue até a pasta raiz do projeto
 ```
 
