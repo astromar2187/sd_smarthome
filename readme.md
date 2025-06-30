@@ -20,7 +20,6 @@ Para rodar este projeto, você precisará ter as seguintes ferramentas instalada
 Você pode verificar suas instalações com:
 
 ```bash
-git --version
 docker --version
 docker compose version # ou 'docker-compose --version' em versões mais antigas
 ```
