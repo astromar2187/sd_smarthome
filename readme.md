@@ -59,12 +59,26 @@ docker ps
 
 Você deverá ver todos os contêineres listados (iot_broker, sensor_temperatura_sala, frontend, etc.) com o status Up.
 
-### 4. Monitorar os Logs dos Sensores
+### 4. Abrir o Dashboard
+
+Acesse [http://localhost:3000/](http://localhost:3000/).
+
+### 5. Monitorar os Logs dos Sensores
 
 Para ver a saída dos seus sensores Python em tempo real você pode usar o comando:
 
 ```bash
-docker compose logs sensor_temperatura_sala -f
+docker logs sensor_sala_temp -f
+```
+
+Em outro terminal, verifique a atuação dos atuadores de lâmpada:
+```bash
+docker logs -f atuador_lampada_cozinha
 ```
 
 Pressione Ctrl+C para sair do monitoramento de logs a qualquer momento.
+
+Para desligar todos os containers:
+```bash
+docker compose down
+```

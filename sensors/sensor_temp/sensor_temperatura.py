@@ -15,11 +15,7 @@ MIN_TEMP = float(os.getenv('MIN_TEMP', 20.0))
 MAX_TEMP = float(os.getenv('MAX_TEMP', 30.0))
 
 # --- Funções de Callback MQTT ---
-# Observação: Para paho-mqtt v2.0+, os callbacks recebem 'client' e 'userdata'
-# como os primeiros argumentos, seguidos pelos argumentos específicos do callback.
-
-# --- Funções de Callback MQTT ---
-def on_connect(client, userdata, flags, rc, properties=None): # <--- ATENÇÃO AQUI!
+def on_connect(client, userdata, flags, rc, properties=None): 
     """
     Callback executado quando o cliente se conecta ao broker MQTT.
     'properties' foi adicionado na API v2.0
@@ -29,18 +25,17 @@ def on_connect(client, userdata, flags, rc, properties=None): # <--- ATENÇÃO A
     else:
         print(f"[{client._client_id.decode()}] Falha na conexão ao broker, código: {rc}")
 
-def on_disconnect(client, userdata, flags, rc, properties=None): # <--- ATENÇÃO AQUI!
+def on_disconnect(client, userdata, flags, rc, properties=None): 
     """
     Callback executado quando o cliente se desconecta do broker MQTT.
-    'properties' foi adicionado na API v2.0
     """
     print(f"[{client._client_id.decode()}] Desconectado do broker MQTT com código: {rc}")
 
-def on_publish(client, userdata,flags, mid, properties=None): # <--- ATENÇÃO AQUI!
+def on_publish(client, userdata,flags, mid, properties=None): 
     """
     Callback executado quando uma mensagem é publicada.
     """
-    # Esta função é útil para depuração, mas não é estritamente necessária para este projeto.
+    #depuração
     pass
 
 # --- Função Principal do Sensor ---

@@ -21,14 +21,40 @@ export default function SmartHomeDashboard() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {sensors.map((sensor) => (
-            <SensorCard
-              key={sensor.id}
-              sensor={sensor}
-              onToggle={sensor.type === "actuator" ? () => toggleDevice(sensor.id) : undefined}
-            />
-          ))}
+        <div className="flex flex-wrap justify-between gap-6">
+          {/* Temperatura */}
+          <div className="flex-1 min-w-[260px] max-w-sm bg-white dark:bg-slate-800 rounded-lg shadow p-4 flex flex-col">
+            <h4 className="font-semibold text-slate-700 dark:text-slate-200 mb-2">Temperatura</h4>
+            {sensors.filter(s => s.sensorType === "temperature").map(sensor => (
+              <SensorCard
+          key={sensor.id}
+          sensor={sensor}
+          onToggle={sensor.type === "actuator" ? () => toggleDevice(sensor.id) : undefined}
+              />
+            ))}
+          </div>
+          {/* Umidade */}
+          <div className="flex-1 min-w-[260px] max-w-sm bg-white dark:bg-slate-800 rounded-lg shadow p-4 flex flex-col">
+            <h4 className="font-semibold text-slate-700 dark:text-slate-200 mb-2">Umidade</h4>
+            {sensors.filter(s => s.sensorType === "humidity").map(sensor => (
+              <SensorCard
+          key={sensor.id}
+          sensor={sensor}
+          onToggle={sensor.type === "actuator" ? () => toggleDevice(sensor.id) : undefined}
+              />
+            ))}
+          </div>
+          {/* Luzes */}
+          <div className="flex-1 min-w-[260px] max-w-sm bg-white dark:bg-slate-800 rounded-lg shadow p-4 flex flex-col">
+            <h4 className="font-semibold text-slate-700 dark:text-slate-200 mb-2">Luzes</h4>
+            {sensors.filter(s => s.sensorType === "light" || s.type === "actuator").map(sensor => (
+              <SensorCard
+          key={sensor.id}
+          sensor={sensor}
+          onToggle={sensor.type === "actuator" ? () => toggleDevice(sensor.id) : undefined}
+              />
+            ))}
+          </div>
         </div>
 
         <div className="mt-12 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 p-6">
@@ -70,7 +96,7 @@ export default function SmartHomeDashboard() {
         </div>
       </main>
 
-      <Footer />
+      <Footer /> 
     </div>
   )
 }

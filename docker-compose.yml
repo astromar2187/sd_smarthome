@@ -1,4 +1,3 @@
-
 services:
   # Define o serviço Mosquitto
   mosquitto:
@@ -36,15 +35,99 @@ services:
       - mosquitto # Garante que o Mosquitto inicie antes deste sensor
     restart: unless-stopped # Faz o container reiniciar automaticamente
 
+  sensor_temperatura_quarto:
+    build:
+      context: ./sensors/sensor_temp # Caminho para a pasta onde está o Dockerfile e os arquivos do sensor
+      dockerfile: Dockerfile              # Nome do Dockerfile dentro dessa pasta
+    container_name: sensor_quarto_temp
+    environment:
+      # Variáveis de ambiente que serão lidas pelo script sensor_temperatura.py
+      MQTT_BROKER: mosquitto          # Usa o nome do serviço do Mosquitto dentro da rede Docker Compose
+      MQTT_PORT: 1883
+      SENSOR_TOPIC: /casa/quarto-principal/temperature/5 # Tópico MQTT específico para este sensor
+      READ_INTERVAL: 15                # Intervalo de leitura em segundos
+      MIN_TEMP: 17.0                  # Temperatura mínima simulada
+      MAX_TEMP: 24.0                  # Temperatura máxima simulada
+      PYTHONUNBUFFERED: 1 
+    depends_on:
+      - mosquitto # Garante que o Mosquitto inicie antes deste sensor
+    restart: unless-stopped # Faz o container reiniciar automaticamente
+
+  sensor_umidade_quarto:
+    build:
+      context: ./sensors/sensor_umidade # Caminho para a pasta onde está o Dockerfile e os arquivos do sensor
+      dockerfile: Dockerfile              # Nome do Dockerfile dentro dessa pasta
+    container_name: sensor_quarto_umidade
+    environment:
+      # Variáveis de ambiente que serão lidas pelo script sensor_humidade.py
+      MQTT_BROKER: mosquitto          # Usa o nome do serviço do Mosquitto dentro da rede Docker Compose
+      MQTT_PORT: 1883
+      SENSOR_TOPIC: /casa/quarto-principal/humidity/6 # Tópico MQTT específico para este sensor
+      READ_INTERVAL: 20                # Intervalo de leitura em segundos
+      MIN_HUMIDITY: 30.0              # Umidade mínima simulada
+      MAX_HUMIDITY: 40.0              # Umidade máxima simulada
+      PYTHONUNBUFFERED: 1 
+    depends_on:
+      - mosquitto # Garante que o Mosquitto inicie antes deste sensor
+    restart: unless-stopped # Faz o container reiniciar automaticamente
+
+  sensor_umidade_cozinha:
+    build:
+      context: ./sensors/sensor_umidade # Caminho para a pasta onde está o Dockerfile e os arquivos do sensor
+      dockerfile: Dockerfile              # Nome do Dockerfile dentro dessa pasta
+    container_name: sensor_cozinha_umidade
+    environment:
+      # Variáveis de ambiente que serão lidas pelo script sensor_humidade.py
+      MQTT_BROKER: mosquitto          # Usa o nome do serviço do Mosquitto dentro da rede Docker Compose
+      MQTT_PORT: 1883 
+      SENSOR_TOPIC: /casa/cozinha/humidity/2 # Tópico MQTT específico para este sensor
+      READ_INTERVAL: 17                # Intervalo de leitura em segundos
+      MIN_HUMIDITY: 60.0              # Umidade mínima simulada
+      MAX_HUMIDITY: 80.0              # Umidade máxima simulada
+      PYTHONUNBUFFERED: 1 
+    depends_on:
+      - mosquitto # Garante que o Mosquitto inicie antes deste sensor
+    restart: unless-stopped # Faz o container reiniciar automaticamente
+
+  atuador_lampada_cozinha:
+    build:
+      context: ./sensors/atuador_lampada # Caminho para a pasta onde está o Dockerfile e os arquivos do atuador
+      dockerfile: Dockerfile              # Nome do Dockerfile dentro dessa pasta
+    container_name: atuador_lampada_cozinha
+    environment:
+      # Variáveis de ambiente que serão lidas pelo script atuador_lampada.py
+      MQTT_BROKER: mosquitto          # Usa o nome do serviço do Mosquitto dentro da rede Docker Compose
+      MQTT_PORT: 1883
+      LAMP_TOPIC: /casa/cozinha/light/3 # Tópico MQTT específico para este atuador
+      PYTHONUNBUFFERED: 1 
+    depends_on:
+      - mosquitto # Garante que o Mosquitto inicie antes deste atuador
+    restart: unless-stopped # Faz o container reiniciar automaticamente
+
+  atuador_lampada_sala:
+    build:
+      context: ./sensors/atuador_lampada # Caminho para a pasta onde está o Dockerfile e os arquivos do atuador
+      dockerfile: Dockerfile              # Nome do Dockerfile dentro dessa pasta
+    container_name: atuador_lampada_sala
+    environment:
+      # Variáveis de ambiente que serão lidas pelo script atuador_lampada.py
+      MQTT_BROKER: mosquitto          # Usa o nome do serviço do Mosquitto dentro da rede Docker Compose
+      MQTT_PORT: 1883
+      LAMP_TOPIC: /casa/sala-de-estar/light/7 # Tópico MQTT específico para este atuador
+      PYTHONUNBUFFERED: 1 
+    depends_on:
+      - mosquitto # Garante que o Mosquitto inicie antes deste atuador
+    restart: unless-stopped # Faz o container reiniciar automaticamente
+
 
     # --- SERVIÇO ATUALIZADO PARA O DASHBOARD COM NEXT.JS ---
-  smart_home_dashboard: # Renomeie para refletir a pasta, se desejar
+  smart_home_dashboard: 
     build:
-      context: ./smart-home-dashboard # Caminho para a pasta do seu projeto Next.js
-      dockerfile: Dockerfile          # O Dockerfile que você acabou de criar/atualizar
+      context: ./smart-home-dashboard 
+      dockerfile: Dockerfile          
     container_name: frontend
     ports:
-      - "3000:3000" # Mapeia a porta 3000 do seu host para a porta 3000 do container Next.js
+      - "3000:3000" 
     depends_on:
       - mosquitto # O dashboard precisa do broker para se conectar
     restart: unless-stopped
