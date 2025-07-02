@@ -1,4 +1,4 @@
-# Projeto: Casa Inteligente Distribuída com Docker e MQTT
+# Projeto: Casa Inteligente com arquitetura distribuída usando Docker e MQTT
 
 Este projeto implementa uma simulação de casa inteligente, onde diversos dispositivos IoT (Internet das Coisas) coletam e publicam dados em tempo real para um broker MQTT. Um dashboard web intuitivo, desenvolvido com Next.js (React), se conecta a este broker para monitorar e exibir todas as leituras de forma visual. Toda a infraestrutura é conteinerizada usando Docker Compose, garantindo portabilidade e facilidade de implantação.
 
